@@ -1,0 +1,40 @@
+# 指定環境語言
+language: node_js
+
+# 是否需要 sudo 權限
+sudo: required
+
+# 指定 node.js 版本
+node_js: 
+  - 12.3.1
+
+# 指定緩存，用以加快編譯速度
+cache:
+  directories:
+    - node_modules
+
+# 指定分支
+branches:
+  only:
+    - master 
+
+before_install:
+  - npm install -g hexo-cli
+
+# Start: Build Lifecycle
+install:
+  - npm install
+  - npm install hexo-deployer-git --save
+
+# 執行腳本
+script:
+  - hexo clean
+  - hexo generate
+
+# 設置 git 提交訊息
+after_script:
+  - git config user.name "Hsins"
+  - git config user.email "hsinspeng@gmail.com"
+  - sed -i "s/gh_token/${TRAVIS_TOKEN}/g" ./_config.yml
+  - hexo deploy
+# End: Build LifeCycle
