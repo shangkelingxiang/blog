@@ -81,15 +81,3 @@ deploy:
   type: git
   repo: https://gh_token@github.com/Hsins/blog.git
   branch: gh-pages
-
-# Setting for markdown it plus
-markdown_it_plus:
-  highlight: true
-  html: true
-  xhtmlOut: true
-  breaks: true
-  langPrefix:
-  linkify: true
-  typographer:
-  quotes: “”‘’
-  pre_class: highlight
