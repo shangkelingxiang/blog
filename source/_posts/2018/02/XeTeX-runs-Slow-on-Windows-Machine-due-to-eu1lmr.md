@@ -1,10 +1,10 @@
 ---
 layout: post
-title: 解決 Windows 環境下 TexLive 編譯卡頓問題
+title: LaTeX | 解決 Windows 環境下 TexLive 編譯卡頓問題
 date: 2018-02-13 03:46:25
+updated: 2019-05-26
 categories: 
 tags: [LaTeX]
-mathjax: false
 ---
 
 # 問題
@@ -15,22 +15,18 @@ mathjax: false
 
 # 解決方法
 
-1. **清空字體緩存**
+首先清空當前 TeXLive 安裝文件夾下 `~\texmf-var\fonts\cache` 的字體緩存，以默認路徑來說：
 
-    主要是清空 TeXLive 安裝目錄下 `~\texmf-var\fonts\cache` 資料夾的東西，以默認路徑來說：
+```bash
+$ rm -rf C:\texlive\2017\texmf-var\fonts\cache
+```
 
-    ```bash
-    $ rm -rf C:\texlive\2017\texmf-var\fonts\cache
-    ```
+接著使用管理者權限打開終端機，切換至 TeXLive 安裝文件夾下的 `~\bin\win32` 目錄，執行 `fc-cache.exe` 重新生成字體緩存，並等到執行完成：
 
-2. **刷新字體緩存**
-
-    於終端機中使用管理者權限（目的在於確保生成字體緩存的執行檔可以讀取上述資料夾）切換至 `~\bin\win32` 目錄下，執行 `fc-cache.exe` 來重新生成字體緩存，等到執行完成：
-
-    ```bash
-    $ cd C:\texlive\2017\bin\win32
-    $ fc-cache -r -v
-    ```
+```bash
+$ cd C:\texlive\2017\bin\win32
+$ fc-cache -r -v
+```
 
 # 參考資料
 

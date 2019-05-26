@@ -1,10 +1,10 @@
 ---
 layout: post
-title: 使用靜態頁面生成器搭建個人網站
+title: Hexo | 使用靜態頁面生成器搭建個人網站
 date: 2018-01-05 03:57:33
+updated: 2019-05-26
 categories: 
 tags: [Git, Hexo]
-mathjax: false
 ---
 
 # 前言
@@ -34,7 +34,7 @@ mathjax: false
 
 # 靜態頁面與靜態頁面渲染器
 
-相較於常見的**内容管理系统（CMS, content management system）**如 [WordPress](https://wordpress.com/)、[Ghost](https://ghost.org)…等，靜態頁面不需要租借或架設伺服器來運行後台，以及維護資料庫系統。目前常見的靜態頁面渲染器包括但不限於：
+相較於常見的 **内容管理系统（CMS, content management system）** 如 [WordPress](https://wordpress.com/)、[Ghost](https://ghost.org)…等，靜態頁面不需要租借或架設伺服器來運行後台，以及維護資料庫系統。目前常見的靜態頁面渲染器包括但不限於：
 
 - [Hexo](https://hexo.io/)
 - [Hugo](https://gohugo.io/)
@@ -42,7 +42,7 @@ mathjax: false
 - [Jekyll](https://jekyllrb.com/)
 - [Octopress](http://octopress.org/)
 
-隨著時代的變遷，後兩者由於當文件數量較多時，渲染速度較慢，已漸漸退出這個市場（雖然還是很多人在使用）。目前主要以 Hexo 和 Hugo 較多，前者基於 `node.js` 而後者基於 `Golang`。而由於 Hugo 預設的 Markdown 渲染器採用 [blackfriday](https://github.com/russross/blackfriday)，常常在處理 MathJax 數學式時與 Markdown 語法相衝突，目前暫時不考慮，但他無疑是當前速度最快的靜態頁面渲染器，並且社群逐日在壯大中。
+隨著時代的變遷，後兩者由於當文件數量較多時，渲染速度較慢，已漸漸退出這個市場（雖然還是很多人在使用）。目前主要以 Hexo 和 Hugo 較多，前者基於 `node.js` 而後者基於 `Go`。而由於 Hugo 預設的 Markdown 渲染器採用 [blackfriday](https://github.com/russross/blackfriday)，常常在處理 MathJax 數學式時與 Markdown 語法相衝突，目前暫時不考慮，但他無疑是當前速度最快的靜態頁面渲染器，並且社群逐日在壯大中。
 
 # 環境搭建
 
@@ -53,7 +53,7 @@ mathjax: false
 
 ## 創建代碼倉庫
 
-目前 [**Github**](https://github.com/) 為每一個代碼**倉庫（repository）**都提供一個靜態頁面託管的 Github Page 功能，但個人網站必須使用 `<username>.github.io` 作為倉庫名稱，並且注意此網站只能以 `master` 分支進行發布（其他倉庫的靜態頁面則無此限制）。
+目前 [**Github**](https://github.com/) 為每一個代碼 **倉庫（repository）** 都提供一個靜態頁面託管的 Github Page 功能，但個人網站必須使用 `<username>.github.io` 作為倉庫名稱，並且注意此網站只能以 `master` 分支進行發布（其他倉庫的靜態頁面則無此限制）。
 
 ## 安裝 hexo
 
