@@ -2,9 +2,9 @@
 layout: post
 title: 刪除過往 Github Repo 的提交紀錄
 date: 2018-03-12 19:23:22
+updated: 2018-03-12
 categories: 
 tags: [Git, Github]
-mathjax: false
 ---
 
 # 前言

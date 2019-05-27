@@ -2,7 +2,7 @@
 layout: post
 title: Hexo | 使用靜態頁面生成器搭建個人網站
 date: 2018-01-05 03:57:33
-updated: 2019-05-26
+updated: 2018-01-05
 categories: 
 tags: [Git, Hexo]
 ---
