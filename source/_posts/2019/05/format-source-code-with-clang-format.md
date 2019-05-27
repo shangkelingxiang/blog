@@ -1,6 +1,6 @@
 ---
 layout: post
-title: C/C++ | 使用 clang-format 對程式碼進行排版
+title: 使用 clang-format 對程式碼進行排版
 date: 2019-05-27 10:14:31
 updated: 2019-05-27 10:14:31
 categories:
@@ -285,7 +285,7 @@ TabWidth: 4
 UseTab:	Never
 ```
 
-# 與編輯器和 IDE 集程使用
+# 與編輯器和 IDE 集成使用
 
 除此之外還可以將 `clang-format` 與常用的編輯器進行集成：
 
