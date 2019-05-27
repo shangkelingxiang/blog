@@ -11,6 +11,8 @@ tags: C/C++, clang-format
 
 [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html) 是基於 `clang` 的程式碼格式化（format，與硬碟的格式化不同，指針對程式碼風格進行排版）工具，支持許多種 Coding Style 如：
 
+<!--more-->
+
 - [Google Style Guides](http://google.github.io/styleguide/)
 - [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - [Webkit Code Style Guidelines](https://webkit.org/code-style-guidelines/)
