@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言一直以來都沒有一個地方可以好好存放自己的筆記和心得，趁著最近稍微有些時間也該好好來整理一下之前零散的東西。這篇文章不僅僅是記錄怎麼利用常見的靜態頁面生成器配合 Github Page 架設個人網站，也將提及個人對於筆記軟體（或者服務）的一些要求。">
+<meta name="keywords" content="Git,Hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo | 使用靜態頁面生成器搭建個人網站">
+<meta property="og:url" content="http://hsins.github.io/blog/2018/01/04/Built-Personal-Website-with-Hexo/index.html">
+<meta property="og:site_name" content="Hsins">
+<meta property="og:description" content="前言一直以來都沒有一個地方可以好好存放自己的筆記和心得，趁著最近稍微有些時間也該好好來整理一下之前零散的東西。這篇文章不僅僅是記錄怎麼利用常見的靜態頁面生成器配合 Github Page 架設個人網站，也將提及個人對於筆記軟體（或者服務）的一些要求。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-01-04T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo | 使用靜態頁面生成器搭建個人網站">
+<meta name="twitter:description" content="前言一直以來都沒有一個地方可以好好存放自己的筆記和心得，趁著最近稍微有些時間也該好好來整理一下之前零散的東西。這篇文章不僅僅是記錄怎麼利用常見的靜態頁面生成器配合 Github Page 架設個人網站，也將提及個人對於筆記軟體（或者服務）的一些要求。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://hsins.github.io/blog/2018/01/04/Built-Personal-Website-with-Hexo/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Hexo | 使用靜態頁面生成器搭建個人網站 | Hsins</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hsins</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">樹猶如此，人何以堪？</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/books/" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>books</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hsins.github.io/blog/blog/2018/01/04/Built-Personal-Website-with-Hexo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hsins">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hsins">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hexo | 使用靜態頁面生成器搭建個人網站
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-01-05 03:57:33 / Modified: 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-05T03:57:33+08:00">2018-01-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">Comments: </span>
+                <a href="/blog/2018/01/04/Built-Personal-Website-with-Hexo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/01/04/Built-Personal-Website-with-Hexo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一直以來都沒有一個地方可以好好存放自己的筆記和心得，趁著最近稍微有些時間也該好好來整理一下之前零散的東西。這篇文章不僅僅是記錄怎麼利用常見的靜態頁面生成器配合 Github Page 架設個人網站，也將提及個人對於筆記軟體（或者服務）的一些要求。</p>
+<a id="more"></a>
+<h1 id="功能需求"><a href="#功能需求" class="headerlink" title="功能需求"></a>功能需求</h1><ul>
+<li><strong>平台兼容</strong>：作為一個手機使用 Android 系統、平板使用 ios 系統、筆電常駐 Windows 10 與 Arch Linux 的人而言，最希望的功能自然是能夠在不同平台上實現兼容與同步的功能。</li>
+<li><strong>書寫方便</strong>：自從習慣使用 LaTeX 之後，對於排版的優雅與書寫的便利性開始漸漸有要求，我想對於多數長期敲代碼的人來說，都會希望能夠儘量不離開鍵盤又能完成要求的事物，這也是為什麼神之編輯器 <code>vim</code> 能夠有著至今無法撼動的地位。而 <a href="http://markdown.tw/" target="_blank" rel="noopener"><strong>Markdown</strong></a> 的誕生，無疑是給了我們一線曙光。</li>
+<li><strong>代碼高亮</strong>：身為一個長期必須看程式碼的人，沒有代碼高亮根本無法過活…因應不同語言與關鍵字上不同的顏色，能夠更清晰地閱讀程式碼，進而更快地理解消化內容。</li>
+<li><strong>數學公式</strong>：不論是作業研究、最佳化還是演算法，這些與我息息相關的學科都離不開數學，因此數學式也是必須的…早年常使用鑲嵌圖片的方式容易造成排版困難且佔用空間，這幾年網頁前端技術的發展，像是 <a href="https://www.mathjax.org/" target="_blank" rel="noopener"><strong>MathJax</strong></a> 和 <a href="https://khan.github.io/KaTeX/" target="_blank" rel="noopener"><strong>KaTeX</strong></a> 都提供了非常優秀的數學式渲染。</li>
+</ul>
+<h1 id="筆記軟體"><a href="#筆記軟體" class="headerlink" title="筆記軟體"></a>筆記軟體</h1><p>以下是多年來曾經使用過的筆記軟體，或者是其構想讓我耳目一新的：</p>
+<ul>
+<li><a href="https://evernote.com/" target="_blank" rel="noopener"><strong>EverNote</strong></a>：作為曾經的獨角獸，至今似乎還是許多人紀錄筆記的首選。但缺點十分顯而易見：不支援數學式渲染、收費政策不如人意、在 Linux 平台下並不友善。</li>
+<li><a href="https://www.wiz.cn/" target="_blank" rel="noopener"><strong>WizNote</strong></a>：是我這麼多年來，第一個願意掏錢支持的應用程式，在各方面都令人十分滿意！唯一可惜的是當初曾經放下豪語提供終身免費，但卻開始收費，曾經在<a href="https://www.zhihu.com/question/53429934" target="_blank" rel="noopener">知乎</a>上引起一陣討論。著手收費後的政策其實十分合理，但似乎開發團隊的熱度有點下降…</li>
+<li><a href="https://boostnote.io/" target="_blank" rel="noopener"><strong>BoostNote</strong></a>：開發熱度十分高，提的 issue 通常很快就會被解決，號稱專門為工程師所開發的筆記軟體（The note-taking app for programmers that focuses on markdown, snippets, and customizability.）</li>
+<li><a href="https://hackmd.io/" target="_blank" rel="noopener"><strong>HackMD</strong></a>：臺灣團隊所開發維護，也算是個人平時使用度略高的服務之一，我覺得最為人詬病的就是「沒有文件夾分類功能」！</li>
+<li><a href="https://leanote.com/" target="_blank" rel="noopener"><strong>LeaNote</strong></a>：使用 Golang 開發，構想非常有趣，既可以是筆記又可以是部落格，曾經一度讓我以為找到了最佳的筆記平台，但可惜的是自訂性仍嫌遜色，另外收費也不太理想。</li>
+<li><a href="https://dynalist.io/" target="_blank" rel="noopener"><strong>Dynalist</strong></a>：類似 <a href="https://workflowy.com/" target="_blank" rel="noopener"><strong>Workflowy</strong></a> 的工具，使用條列式來進行筆記，條列式間可以再進行縮放，我認為在處理零碎的知識點上十分方便。</li>
+<li><a href="https://www.onenote.com/" target="_blank" rel="noopener"><strong>OneNote</strong></a>：不太類似於上述工具，但如果配合 Surface 系列產品與手寫筆，能夠創造非常高效的生產力。</li>
+</ul>
+<h1 id="靜態頁面與靜態頁面渲染器"><a href="#靜態頁面與靜態頁面渲染器" class="headerlink" title="靜態頁面與靜態頁面渲染器"></a>靜態頁面與靜態頁面渲染器</h1><p>相較於常見的 <strong>内容管理系统（CMS, content management system）</strong> 如 <a href="https://wordpress.com/" target="_blank" rel="noopener">WordPress</a>、<a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>…等，靜態頁面不需要租借或架設伺服器來運行後台，以及維護資料庫系統。目前常見的靜態頁面渲染器包括但不限於：</p>
+<ul>
+<li><a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a></li>
+<li><a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a></li>
+<li><a href="https://blog.getpelican.com/" target="_blank" rel="noopener">Pelican</a></li>
+<li><a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a></li>
+<li><a href="http://octopress.org/" target="_blank" rel="noopener">Octopress</a></li>
+</ul>
+<p>隨著時代的變遷，後兩者由於當文件數量較多時，渲染速度較慢，已漸漸退出這個市場（雖然還是很多人在使用）。目前主要以 Hexo 和 Hugo 較多，前者基於 <code>node.js</code> 而後者基於 <code>Go</code>。而由於 Hugo 預設的 Markdown 渲染器採用 <a href="https://github.com/russross/blackfriday" target="_blank" rel="noopener">blackfriday</a>，常常在處理 MathJax 數學式時與 Markdown 語法相衝突，目前暫時不考慮，但他無疑是當前速度最快的靜態頁面渲染器，並且社群逐日在壯大中。</p>
+<h1 id="環境搭建"><a href="#環境搭建" class="headerlink" title="環境搭建"></a>環境搭建</h1><p>必須先具備的東西有：</p>
+<ul>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a></li>
+<li><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a></li>
+</ul>
+<h2 id="創建代碼倉庫"><a href="#創建代碼倉庫" class="headerlink" title="創建代碼倉庫"></a>創建代碼倉庫</h2><p>目前 <a href="https://github.com/" target="_blank" rel="noopener"><strong>Github</strong></a> 為每一個代碼 <strong>倉庫（repository）</strong> 都提供一個靜態頁面託管的 Github Page 功能，但個人網站必須使用 <code>&lt;username&gt;.github.io</code> 作為倉庫名稱，並且注意此網站只能以 <code>master</code> 分支進行發布（其他倉庫的靜態頁面則無此限制）。</p>
+<h2 id="安裝-hexo"><a href="#安裝-hexo" class="headerlink" title="安裝 hexo"></a>安裝 hexo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br><span class="line">$ hexo init hsins.github.io             <span class="comment"># initialize a hexo site in document</span></span><br><span class="line">$ <span class="built_in">cd</span> hsins.github.io</span><br><span class="line">$ npm install                           <span class="comment"># install and update the demanding plugin</span></span><br></pre></td></tr></table></figure>
+<h2 id="下載-Next-主題"><a href="#下載-Next-主題" class="headerlink" title="下載 Next 主題"></a>下載 <a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">Next</a> 主題</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next ./theme/next</span><br><span class="line">$ rm -rf ./theme/landscape              <span class="comment"># delete the default theme "Landscape"</span></span><br><span class="line">$ rm -rf ./theme/next/.git*             <span class="comment"># delete the git repo of theme "NexT"</span></span><br><span class="line">$ npm install hexo-deployer-git --save  <span class="comment"># install the deployer plugin</span></span><br></pre></td></tr></table></figure>
+<h2 id="修改設定值"><a href="#修改設定值" class="headerlink" title="修改設定值"></a>修改設定值</h2><ul>
+<li>修改 Hexo 本身設定：<code>./_config.yml</code> <a href="https://github.com/Hsins/hsins.github.io/blob/source/_config.yml" target="_blank" rel="noopener">(參考)</a></li>
+<li>修改 Next 主題設定：<code>./theme/next/_config.yml</code> <a href="https://github.com/Hsins/hsins.github.io/blob/source/themes/next/_config.yml" target="_blank" rel="noopener">(參考)</a></li>
+</ul>
+<h2 id="推送至代碼倉庫"><a href="#推送至代碼倉庫" class="headerlink" title="推送至代碼倉庫"></a>推送至代碼倉庫</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git init                              <span class="comment"># initialize the git repo</span></span><br><span class="line">$ git remote add origin https://github.com/Hsins/hsins.github.io.git</span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">'First Update'</span></span><br><span class="line">$ git branch <span class="built_in">source</span>                     <span class="comment"># establish the local branch "source"</span></span><br><span class="line">$ git checkout <span class="built_in">source</span>                   <span class="comment"># change the branch to "source"</span></span><br><span class="line">$ git push -u <span class="built_in">source</span>                    <span class="comment"># push the source to branch "source" on Github.com</span></span><br></pre></td></tr></table></figure>
+<h1 id="撰寫文章"><a href="#撰寫文章" class="headerlink" title="撰寫文章"></a>撰寫文章</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo new [layout] &lt;title&gt;             <span class="comment"># layout can be "post", "page" and "draft"</span></span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy                           <span class="comment"># deploy the article to branch "master"</span></span><br><span class="line"></span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"update"</span></span><br><span class="line">$ git push</span><br></pre></td></tr></table></figure>
+<h1 id="遠端同步"><a href="#遠端同步" class="headerlink" title="遠端同步"></a>遠端同步</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/Hsins/hsins.github.io.git</span><br><span class="line">$ npm install</span><br><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ git push origin <span class="built_in">source</span></span><br></pre></td></tr></table></figure>
+<h1 id="數學渲染轉義問題"><a href="#數學渲染轉義問題" class="headerlink" title="數學渲染轉義問題"></a>數學渲染轉義問題</h1><p>Hexo 預設使用 <code>hexo-renderer-marked</code> 引擎進行渲染，但對於底線、反斜線、中括號定義了轉義，容易與 MathJax 數學公式渲染時所處理的字符造成衝突，建議可以變更渲染引擎為下列選項中其中一個：</p>
+<ul>
+<li><code>hexo-renderer-kramed</code></li>
+<li><code>hexo-renderer-pandoc</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm uninstall hexo-renderer-marked --save     <span class="comment"># uninstall the hexo-renderer-marked</span></span><br><span class="line">$ npm install hexo-renderer-kramed --save       <span class="comment"># install the hexo-renderer-kramed</span></span><br></pre></td></tr></table></figure>
+<p>除此之外，還需要改變行內公式的轉義設定。修改 <code>.\node_modules\kramed\lib\rules</code> 下的 <code>inline.js</code> 文件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// escape part</span></span><br><span class="line">- <span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/</span>,</span><br><span class="line">+ <span class="built_in">escape</span>: <span class="regexp">/^\\([`*\[\]()#$+\-.!_&gt;])/</span>,</span><br><span class="line"></span><br><span class="line"><span class="comment">// em part</span></span><br><span class="line">- em: <span class="regexp">/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br><span class="line">+ em: <span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure>
+<h1 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h1><ol>
+<li><a href="http://masikkk.com/blog/hexo-3-source-backup-and-sync-between-diff-computer/" target="_blank" rel="noopener">Hexo博客(3)源码备份及不同电脑上的同步问题</a></li>
+<li><a href="http://mungo.space/2015/10/14/create-hexo-on-github-4/" target="_blank" rel="noopener">在Github上面搭建Hexo博客（四）:使用不同电脑维护</a></li>
+<li><a href="http://www.dxjia.cn/2016/01/27/hexo-write-everywhere/" target="_blank" rel="noopener">Hexo利用Github分支在不同电脑上写博客</a></li>
+<li><a href="http://kwangka.github.io/2015/01/17/how-to-synchronize-blog/" target="_blank" rel="noopener">不同电脑上同步Hexo Blog</a></li>
+<li><a href="https://once4623.site/2017/10/03/2017-10-04--Use-MathJax-In-Hexo-Next/" target="_blank" rel="noopener">在Hexo中使用LaTeX语法输入数学公式</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/blog/tags/Hexo/" rel="tag"># Hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/12/30/hello-world/" rel="next" title="Hello World!">
+                <i class="fa fa-chevron-left"></i> Hello World!
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/02/12/XeTeX-runs-Slow-on-Windows-Machine-due-to-eu1lmr/" rel="prev" title="LaTeX | 解決 Windows 環境下 TexLive 編譯卡頓問題">
+                LaTeX | 解決 Windows 環境下 TexLive 編譯卡頓問題 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/uploads/avatar.jpg" alt="Hsins">
+            
+              <p class="site-author-name" itemprop="name">Hsins</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/blog/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hsins" title="GitHub &rarr; https://github.com/Hsins" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:hsinspeng@gmail.com" title="E-Mail &rarr; mailto:hsinspeng@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.facebook.com/hsinspeng" title="FB Page &rarr; https://www.facebook.com/hsinspeng" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.youtube.com/channel/UCar6T3xI9focS8DQR9Eh1uQ" title="YouTube &rarr; https://www.youtube.com/channel/UCar6T3xI9focS8DQR9Eh1uQ" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#功能需求"><span class="nav-number">2.</span> <span class="nav-text">功能需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#筆記軟體"><span class="nav-number">3.</span> <span class="nav-text">筆記軟體</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#靜態頁面與靜態頁面渲染器"><span class="nav-number">4.</span> <span class="nav-text">靜態頁面與靜態頁面渲染器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#環境搭建"><span class="nav-number">5.</span> <span class="nav-text">環境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#創建代碼倉庫"><span class="nav-number">5.1.</span> <span class="nav-text">創建代碼倉庫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安裝-hexo"><span class="nav-number">5.2.</span> <span class="nav-text">安裝 hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下載-Next-主題"><span class="nav-number">5.3.</span> <span class="nav-text">下載 Next 主題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改設定值"><span class="nav-number">5.4.</span> <span class="nav-text">修改設定值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推送至代碼倉庫"><span class="nav-number">5.5.</span> <span class="nav-text">推送至代碼倉庫</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#撰寫文章"><span class="nav-number">6.</span> <span class="nav-text">撰寫文章</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遠端同步"><span class="nav-number">7.</span> <span class="nav-text">遠端同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數學渲染轉義問題"><span class="nav-number">8.</span> <span class="nav-text">數學渲染轉義問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考資料"><span class="nav-number">9.</span> <span class="nav-text">參考資料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hsins</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/blog/js/utils.js?v=7.1.1"></script>
+
+  <script src="/blog/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/blog/js/schemes/muse.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/blog/js/scrollspy.js?v=7.1.1"></script>
+<script src="/blog/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://hsins.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://hsins.github.io/blog/2018/01/04/Built-Personal-Website-with-Hexo/";
+    this.page.identifier = "2018/01/04/Built-Personal-Website-with-Hexo/";
+    this.page.title = 'Hexo | 使用靜態頁面生成器搭建個人網站';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://hsins.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

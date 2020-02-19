@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="介紹clang-format 是基於 clang 的程式碼格式化（format，與硬碟的格式化不同，指針對程式碼風格進行排版）工具，支持許多種 Coding Style 如：">
+<meta name="keywords" content="C&#x2F;C++,clang-format">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 clang-format 對程式碼進行排版">
+<meta property="og:url" content="http://hsins.github.io/blog/2019/05/27/format-source-code-with-clang-format/index.html">
+<meta property="og:site_name" content="Hsins">
+<meta property="og:description" content="介紹clang-format 是基於 clang 的程式碼格式化（format，與硬碟的格式化不同，指針對程式碼風格進行排版）工具，支持許多種 Coding Style 如：">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-27T02:14:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 clang-format 對程式碼進行排版">
+<meta name="twitter:description" content="介紹clang-format 是基於 clang 的程式碼格式化（format，與硬碟的格式化不同，指針對程式碼風格進行排版）工具，支持許多種 Coding Style 如：">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://hsins.github.io/blog/2019/05/27/format-source-code-with-clang-format/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用 clang-format 對程式碼進行排版 | Hsins</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hsins</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">樹猶如此，人何以堪？</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/books/" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>books</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hsins.github.io/blog/blog/2019/05/27/format-source-code-with-clang-format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hsins">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hsins">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用 clang-format 對程式碼進行排版
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-27 10:14:31" itemprop="dateCreated datePublished" datetime="2019-05-27T10:14:31+08:00">2019-05-27</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">Comments: </span>
+                <a href="/blog/2019/05/27/format-source-code-with-clang-format/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/27/format-source-code-with-clang-format/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="介紹"><a href="#介紹" class="headerlink" title="介紹"></a>介紹</h1><p><a href="https://clang.llvm.org/docs/ClangFormat.html" target="_blank" rel="noopener"><code>clang-format</code></a> 是基於 <code>clang</code> 的程式碼格式化（format，與硬碟的格式化不同，指針對程式碼風格進行排版）工具，支持許多種 Coding Style 如：</p>
+<a id="more"></a>
+<ul>
+<li><a href="http://google.github.io/styleguide/" target="_blank" rel="noopener">Google Style Guides</a></li>
+<li><a href="https://llvm.org/docs/CodingStandards.html" target="_blank" rel="noopener">LLVM Coding Standards</a></li>
+<li><a href="https://webkit.org/code-style-guidelines/" target="_blank" rel="noopener">Webkit Code Style Guidelines</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Coding_Style" target="_blank" rel="noopener">Mozilla Coding style</a></li>
+<li>…</li>
+</ul>
+<h1 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h1><h2 id="Microsoft-Windows-10"><a href="#Microsoft-Windows-10" class="headerlink" title="Microsoft Windows 10"></a>Microsoft Windows 10</h2><p>在 Windows 作業系統下，必須先安裝好 Python 環境並將其添加至環境變數中，接著在 <a href="http://llvm.org/builds/" target="_blank" rel="noopener">LLVM Snapshot Builds</a> 頁面選擇 Windows 版本進行安裝，注意在安裝過程中要勾選 <code>Add LLVM to the system PATH for all users</code> 或 <code>Add LLVM to the system PATH for current user</code> 其中一項。安裝完後可以在終端機中檢查當前版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ clang-format -version</span><br><span class="line">clang-format version 9.0.0 (trunk)</span><br></pre></td></tr></table></figure>
+<h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><p>在 macOS 作業系統下，使用套件管理工具 <a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a> 進行安裝：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install clang-format</span><br></pre></td></tr></table></figure>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="主要用法"><a href="#主要用法" class="headerlink" title="主要用法"></a>主要用法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 LLVM 風格格式化 main.cpp，並將結果輸出到 stdout</span></span><br><span class="line">$ clang-format -style=LLVM main.cpp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以 LLVM 風格格式化 main.cpp，直接將結果對 main.cpp 進行覆寫</span></span><br><span class="line">$ clang-format -style=LLVM -i main.cpp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以 LLVM 風格格式化當前目錄下所有 *.cpp *.h，直接將結果進行覆寫（won't recurse into subdirectories）</span></span><br><span class="line">$ clang-format -style=LLVM -i *.cpp *.h</span><br><span class="line"></span><br><span class="line"><span class="comment"># 對指定行數內容進行格式化，格式化 main.cpp 的第 1-5 行</span></span><br><span class="line">$ clang-format -style=LLVM -lines=1:5 main.cpp</span><br></pre></td></tr></table></figure>
+<h2 id="配合-git-使用"><a href="#配合-git-使用" class="headerlink" title="配合 git 使用"></a>配合 <code>git</code> 使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 對 git 設定全局風格檔案路徑與 clang-format 版本</span></span><br><span class="line">$ git config --global clangFormat.binary clang-format-9.0</span><br><span class="line">$ git config --global clangFormat.style file</span><br><span class="line">$ git config --global --path clangFormat.stylePath /PATH/.clang-format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 格式化所有已 stage 的文件</span></span><br><span class="line">$ git clang-format -style=LLVM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 格式化整個 repo 並創建一個提交</span></span><br><span class="line">$ git clang-format -style=LLVM --commit `git <span class="built_in">hash</span>-object -t tree /dev/null`</span><br></pre></td></tr></table></figure>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配合 find 與正則表達式，遞迴地對資料夾與子資料夾中文件進行格式化</span></span><br><span class="line">$ find . -regex <span class="string">'.*\.\(cpp\|hpp\|cc\|cxx\)'</span> -<span class="built_in">exec</span> clang-format -style=LLVM -i &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<h1 id="格式配置：-clang-format-的使用"><a href="#格式配置：-clang-format-的使用" class="headerlink" title="格式配置：.clang-format 的使用"></a>格式配置：<code>.clang-format</code> 的使用</h1><p>通常根據不同專案，會在某些細節部分的排版進行微調。我們可以透過在專案的根目錄下加入 <code>.clang-format</code> 文件，來自定義該專案的格式配置，可以透過以下命令生成一個基於指定樣式的 <code>.clang-format</code> 文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ clang-format -style=llvm -dump-config &gt; .clang-format</span><br></pre></td></tr></table></figure>
+<p>以下是一份加上了註解的 <code>.clang-format</code>，或者是可以使用 <a href="https://zed0.co.uk/clang-format-configurator/" target="_blank" rel="noopener">clang-format Configurator</a> 進行具體修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br></pre></td><td class="code"><pre><span class="line"># 語言: None, Cpp, Java, JavaScript, ObjC, Proto, TableGen, TextProto</span><br><span class="line">Language: Cpp</span><br><span class="line">BasedOnStyle: LLVM</span><br><span class="line"></span><br><span class="line"># 訪問說明符（public、private…）的偏移</span><br><span class="line">AccessModifierOffset: -4</span><br><span class="line"></span><br><span class="line"># 開括號後的對齊: Align, DontAlign, AlwaysBreak（總是在開括號後換行）</span><br><span class="line">AlignAfterOpenBracket: Align</span><br><span class="line"></span><br><span class="line"># 連續賦值時，對齊所有等號</span><br><span class="line">AlignConsecutiveAssignments: true</span><br><span class="line"></span><br><span class="line"># 連續宣告時，對齊所有宣告的變數名稱</span><br><span class="line">AlignConsecutiveDeclarations: true</span><br><span class="line"></span><br><span class="line"># 左對齊跳脫換行（使用反斜杠換行）的反斜杠</span><br><span class="line">AlignEscapedNewlinesLeft: true</span><br><span class="line"></span><br><span class="line"># 水平對齊二元和三元表達式的操作數</span><br><span class="line">AlignOperands: true</span><br><span class="line"></span><br><span class="line"># 對齊連續的尾隨的註釋</span><br><span class="line">AlignTrailingComments: true</span><br><span class="line"></span><br><span class="line"># 允許函數聲明的所有參數在放在下一行</span><br><span class="line">AllowAllParametersOfDeclarationOnNextLine: true</span><br><span class="line"></span><br><span class="line"># 允許短的塊放在同一行</span><br><span class="line">AllowShortBlocksOnASingleLine:	false</span><br><span class="line"></span><br><span class="line"># 允許短的 case 標簽放在同一行</span><br><span class="line">AllowShortCaseLabelsOnASingleLine:	false</span><br><span class="line"></span><br><span class="line"># 允許短的函數放在同一行: None, InlineOnly, Empty, Inline, All</span><br><span class="line">AllowShortFunctionsOnASingleLine: Empty</span><br><span class="line"></span><br><span class="line"># 允許短的 if 語句保持在同一行</span><br><span class="line">AllowShortIfStatementsOnASingleLine:	false</span><br><span class="line"></span><br><span class="line"># 允許短的循環保持在同一行</span><br><span class="line">AllowShortLoopsOnASingleLine:	false</span><br><span class="line"></span><br><span class="line"># 總是在定義返回類型後換行（deprecated）</span><br><span class="line">AlwaysBreakAfterDefinitionReturnType:	None</span><br><span class="line"></span><br><span class="line"># 總是在返回類型後換行: None, All, TopLevel(頂級函數，不包括在類中的函數), </span><br><span class="line">#   AllDefinitions(所有的定義，不包括聲明), TopLevelDefinitions(所有的頂級函數的定義)</span><br><span class="line">AlwaysBreakAfterReturnType:	None</span><br><span class="line"></span><br><span class="line"># 總是在多行 string 字面量前換行</span><br><span class="line">AlwaysBreakBeforeMultilineStrings:	false</span><br><span class="line"></span><br><span class="line"># 總是在 template 宣告後換行</span><br><span class="line">AlwaysBreakTemplateDeclarations: true</span><br><span class="line"></span><br><span class="line"># false 表示函數實參要麽都在同一行，要麽都各自一行</span><br><span class="line">BinPackArguments:	true</span><br><span class="line"></span><br><span class="line"># false 表示所有形參要麽都在同一行，要麽都各自一行</span><br><span class="line">BinPackParameters:	true</span><br><span class="line"></span><br><span class="line"># 大括號換行，只有當 BreakBeforeBraces 設置為 Custom 時才有效</span><br><span class="line">BraceWrapping: </span><br><span class="line">  # class定義後面</span><br><span class="line">  AfterClass:	false</span><br><span class="line">  # 控制語句後面</span><br><span class="line">  AfterControlStatement:	false</span><br><span class="line">  # enum定義後面</span><br><span class="line">  AfterEnum:	false</span><br><span class="line">  # 函數定義後面</span><br><span class="line">  AfterFunction:	false</span><br><span class="line">  # 命名空間定義後面</span><br><span class="line">  AfterNamespace:	false</span><br><span class="line">  # ObjC定義後面</span><br><span class="line">  AfterObjCDeclaration:	false</span><br><span class="line">  # struct定義後面</span><br><span class="line">  AfterStruct:	false</span><br><span class="line">  # union定義後面</span><br><span class="line">  AfterUnion:	false</span><br><span class="line">  # catch之前</span><br><span class="line">  BeforeCatch:	true</span><br><span class="line">  # else之前</span><br><span class="line">  BeforeElse:	true</span><br><span class="line">  # 縮進大括號</span><br><span class="line">  IndentBraces:	false</span><br><span class="line"></span><br><span class="line"># 在二元運算符前換行: None, NonAssignment(在非賦值的操作符前換行), All(在操作符前換行)</span><br><span class="line">BreakBeforeBinaryOperators:	NonAssignment</span><br><span class="line"># 在大括號前換行: Attach(始終將大括號附加到周圍的上下文), Linux(除函數、命名空間和類定義，與Attach類似), </span><br><span class="line">#   Mozilla(除枚舉、函數、記錄定義，與Attach類似), Stroustrup(除函數定義、catch、else，與Attach類似), </span><br><span class="line">#   Allman(總是在大括號前換行), GNU(總是在大括號前換行，並對於控制語句的大括號增加額外的縮進), WebKit(在函數前換行), Custom</span><br><span class="line">#   註：這裏認為語句塊也屬於函數</span><br><span class="line">BreakBeforeBraces:	Custom</span><br><span class="line"># 在三元運算符前換行</span><br><span class="line">BreakBeforeTernaryOperators:	true</span><br><span class="line"># 在構造函數的初始化列表的逗號前換行</span><br><span class="line">BreakConstructorInitializersBeforeComma:	false</span><br><span class="line"># 每行字符的限制，0表示沒有限制</span><br><span class="line">ColumnLimit:	200</span><br><span class="line"># 描述具有特殊意義的註釋的正則表達式，它不應該被分割為多行或以其它方式改變</span><br><span class="line">CommentPragmas:	&apos;^ IWYU pragma:&apos;</span><br><span class="line"># 構造函數的初始化列表要麽都在同一行，要麽都各自一行</span><br><span class="line">ConstructorInitializerAllOnOneLineOrOnePerLine:	false</span><br><span class="line"># 構造函數的初始化列表的縮進寬度</span><br><span class="line">ConstructorInitializerIndentWidth:	4</span><br><span class="line"># 延續的行的縮進寬度</span><br><span class="line">ContinuationIndentWidth:	4</span><br><span class="line"># 去除C++11的列表初始化的大括號&#123;後和&#125;前的空格</span><br><span class="line">Cpp11BracedListStyle:	false</span><br><span class="line"># 繼承最常用的指針和引用的對齊方式</span><br><span class="line">DerivePointerAlignment:	false</span><br><span class="line"># 關閉格式化</span><br><span class="line">DisableFormat:	false</span><br><span class="line"># 自動檢測函數的調用和定義是否被格式為每行一個參數(Experimental)</span><br><span class="line">ExperimentalAutoDetectBinPacking:	false</span><br><span class="line"># 需要被解讀為foreach循環而不是函數調用的宏</span><br><span class="line">ForEachMacros:	[ foreach, Q_FOREACH, BOOST_FOREACH ]</span><br><span class="line"># 對#include進行排序，匹配了某正則表達式的#include擁有對應的優先級，匹配不到的則默認優先級為INT_MAX(優先級越小排序越靠前)，</span><br><span class="line">#   可以定義負數優先級從而保證某些#include永遠在最前面</span><br><span class="line">IncludeCategories: </span><br><span class="line">  - Regex:	&apos;^&quot;(llvm|llvm-c|clang|clang-c)/&apos;</span><br><span class="line">    Priority:	2</span><br><span class="line">  - Regex:	&apos;^(&lt;|&quot;(gtest|isl|json)/)&apos;</span><br><span class="line">    Priority:	3</span><br><span class="line">  - Regex:	&apos;.*&apos;</span><br><span class="line">    Priority:	1</span><br><span class="line"># 縮進case標簽</span><br><span class="line">IndentCaseLabels:	false</span><br><span class="line"># 縮進寬度</span><br><span class="line">IndentWidth:	4</span><br><span class="line"># 函數返回類型換行時，縮進函數聲明或函數定義的函數名</span><br><span class="line">IndentWrappedFunctionNames:	false</span><br><span class="line"># 保留在塊開始處的空行</span><br><span class="line">KeepEmptyLinesAtTheStartOfBlocks:	true</span><br><span class="line"># 開始一個塊的宏的正則表達式</span><br><span class="line">MacroBlockBegin:	&apos;&apos;</span><br><span class="line"># 結束一個塊的宏的正則表達式</span><br><span class="line">MacroBlockEnd:	&apos;&apos;</span><br><span class="line"># 連續空行的最大數量</span><br><span class="line">MaxEmptyLinesToKeep:	1</span><br><span class="line"># 命名空間的縮進: None, Inner(縮進嵌套的命名空間中的內容), All</span><br><span class="line">NamespaceIndentation:	Inner</span><br><span class="line"># 使用ObjC塊時縮進寬度</span><br><span class="line">ObjCBlockIndentWidth:	4</span><br><span class="line"># 在ObjC的@property後添加一個空格</span><br><span class="line">ObjCSpaceAfterProperty:	false</span><br><span class="line"># 在ObjC的protocol列表前添加一個空格</span><br><span class="line">ObjCSpaceBeforeProtocolList:	true</span><br><span class="line"># 在call(後對函數調用換行的penalty</span><br><span class="line">PenaltyBreakBeforeFirstCallParameter:	19</span><br><span class="line"># 在一個註釋中引入換行的penalty</span><br><span class="line">PenaltyBreakComment:	300</span><br><span class="line"># 第一次在&lt;&lt;前換行的penalty</span><br><span class="line">PenaltyBreakFirstLessLess:	120</span><br><span class="line"># 在一個字符串字面量中引入換行的penalty</span><br><span class="line">PenaltyBreakString:	1000</span><br><span class="line"># 對於每個在行字符數限制之外的字符的penalty</span><br><span class="line">PenaltyExcessCharacter:	1000000</span><br><span class="line"># 將函數的返回類型放到它自己的行的penalty</span><br><span class="line">PenaltyReturnTypeOnItsOwnLine:	60</span><br><span class="line"># 指針和引用的對齊: Left, Right, Middle</span><br><span class="line">PointerAlignment:	Left</span><br><span class="line"># 允許重新排版註釋</span><br><span class="line">ReflowComments:	true</span><br><span class="line"># 允許排序#include</span><br><span class="line">SortIncludes:	true</span><br><span class="line"># 在C風格類型轉換後添加空格</span><br><span class="line">SpaceAfterCStyleCast:	false</span><br><span class="line"># 在賦值運算符之前添加空格</span><br><span class="line">SpaceBeforeAssignmentOperators:	true</span><br><span class="line"># 開圓括號之前添加一個空格: Never, ControlStatements, Always</span><br><span class="line">SpaceBeforeParens:	ControlStatements</span><br><span class="line"># 在空的圓括號中添加空格</span><br><span class="line">SpaceInEmptyParentheses:	false</span><br><span class="line"># 在尾隨的評論前添加的空格數(只適用於//)</span><br><span class="line">SpacesBeforeTrailingComments:	2</span><br><span class="line"># 在尖括號的&lt;後和&gt;前添加空格</span><br><span class="line">SpacesInAngles:	true</span><br><span class="line"># 在容器(ObjC和JavaScript的數組和字典等)字面量中添加空格</span><br><span class="line">SpacesInContainerLiterals:	true</span><br><span class="line"># 在C風格類型轉換的括號中添加空格</span><br><span class="line">SpacesInCStyleCastParentheses:	true</span><br><span class="line"># 在圓括號的(後和)前添加空格</span><br><span class="line">SpacesInParentheses:	true</span><br><span class="line"># 在方括號的[後和]前添加空格，lamda表達式和未指明大小的數組的聲明不受影響</span><br><span class="line">SpacesInSquareBrackets:	true</span><br><span class="line"></span><br><span class="line"># 標準: Cpp03, Cpp11, Auto</span><br><span class="line">Standard: Cpp11</span><br><span class="line"></span><br><span class="line"># tab 寬度</span><br><span class="line">TabWidth: 4</span><br><span class="line"></span><br><span class="line"># 使用 tab 字元: Never, ForIndentation, ForContinuationAndIndentation, Always</span><br><span class="line">UseTab:	Never</span><br></pre></td></tr></table></figure>
+<h1 id="與編輯器和-IDE-集成使用"><a href="#與編輯器和-IDE-集成使用" class="headerlink" title="與編輯器和 IDE 集成使用"></a>與編輯器和 IDE 集成使用</h1><p>除此之外還可以將 <code>clang-format</code> 與常用的編輯器進行集成：</p>
+<ul>
+<li><a href="https://atom.io/packages/clang-format" target="_blank" rel="noopener">Atom</a></li>
+<li><a href="http://clang.llvm.org/docs/ClangFormat.html#clion-integration" target="_blank" rel="noopener">CLion</a></li>
+<li><a href="http://clang.llvm.org/docs/ClangFormat.html#emacs-integration" target="_blank" rel="noopener">Emacs</a></li>
+<li><a href="http://clang.llvm.org/docs/ClangFormat.html#vim-integration" target="_blank" rel="noopener">Vim</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools" target="_blank" rel="noopener">Visual Studio Code</a></li>
+<li><a href="https://docs.microsoft.com/en/visualstudio/ide/reference/options-text-editor-c-cpp-formatting?view=vs-2019" target="_blank" rel="noopener">Visual Studio</a></li>
+</ul>
+<h1 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h1><ul>
+<li><a href="https://github.com/eklitzke/clang-format-all" target="_blank" rel="noopener">GitHub | eklitzke/clang-format-all</a></li>
+<li><a href="https://blog.csdn.net/softimite_zifeng/article/details/78357898" target="_blank" rel="noopener">子豐的博客 | Clang-Format 格式化選項介绍</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/C-C/" rel="tag"># C/C++</a>
+          
+            <a href="/blog/tags/clang-format/" rel="tag"># clang-format</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/03/12/Delete-Git-commit-history/" rel="next" title="刪除過往 Github Repo 的提交紀錄">
+                <i class="fa fa-chevron-left"></i> 刪除過往 Github Repo 的提交紀錄
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/05/30/rescue-and-reinstall-grub-after-updating-windows/" rel="prev" title="修復微軟更新後損毀的 Grub">
+                修復微軟更新後損毀的 Grub <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/uploads/avatar.jpg" alt="Hsins">
+            
+              <p class="site-author-name" itemprop="name">Hsins</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/blog/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hsins" title="GitHub &rarr; https://github.com/Hsins" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:hsinspeng@gmail.com" title="E-Mail &rarr; mailto:hsinspeng@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.facebook.com/hsinspeng" title="FB Page &rarr; https://www.facebook.com/hsinspeng" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.youtube.com/channel/UCar6T3xI9focS8DQR9Eh1uQ" title="YouTube &rarr; https://www.youtube.com/channel/UCar6T3xI9focS8DQR9Eh1uQ" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介紹"><span class="nav-number">1.</span> <span class="nav-text">介紹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安裝"><span class="nav-number">2.</span> <span class="nav-text">安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Microsoft-Windows-10"><span class="nav-number">2.1.</span> <span class="nav-text">Microsoft Windows 10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#macOS"><span class="nav-number">2.2.</span> <span class="nav-text">macOS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要用法"><span class="nav-number">3.1.</span> <span class="nav-text">主要用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配合-git-使用"><span class="nav-number">3.2.</span> <span class="nav-text">配合 git 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">3.3.</span> <span class="nav-text">常用命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式配置：-clang-format-的使用"><span class="nav-number">4.</span> <span class="nav-text">格式配置：.clang-format 的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#與編輯器和-IDE-集成使用"><span class="nav-number">5.</span> <span class="nav-text">與編輯器和 IDE 集成使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#參考資料"><span class="nav-number">6.</span> <span class="nav-text">參考資料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hsins</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/blog/js/utils.js?v=7.1.1"></script>
+
+  <script src="/blog/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/blog/js/schemes/muse.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/blog/js/scrollspy.js?v=7.1.1"></script>
+<script src="/blog/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script id="dsq-count-scr" src="https://hsins.disqus.com/count.js" async></script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://hsins.github.io/blog/2019/05/27/format-source-code-with-clang-format/";
+    this.page.identifier = "2019/05/27/format-source-code-with-clang-format/";
+    this.page.title = '使用 clang-format 對程式碼進行排版';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://hsins.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
